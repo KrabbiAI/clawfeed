@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLAWFEED - News Dashboard</title>
+    <link rel="stylesheet" href="src/styles/main.css">
+    <link rel="stylesheet" href="src/styles/dashboard.css">
+</head>
+<body>
+    <!-- Header -->
+    <div class="container">
+        <div class="header">
+            <div class="title">🦀 CLAWFEED</div>
+            <div class="subtitle">Real-Time IT Threat & Innovation Feed</div>
+            <div class="meta">
+                <span id="current-date"></span>
+                <span id="feed-count"></span>
+                <span>STATUS: ONLINE</span>
+            </div>
+        </div>
+
+        <!-- Category Buttons -->
+        <div class="categories">
+            <button class="category-btn security" onclick="openDashboard('SECURITY')">
+                <span class="cat-icon">🔒</span>
+                <span class="cat-label">IT-Security</span>
+                <span class="cat-count" id="count-security">0 Items</span>
+            </button>
+            <button class="category-btn zeroday" onclick="openDashboard('ZERODAY')">
+                <span class="cat-icon">💣</span>
+                <span class="cat-label">Zeroday</span>
+                <span class="cat-count" id="count-zeroday">0 Items</span>
+            </button>
+            <button class="category-btn cloud" onclick="openDashboard('CLOUD')">
+                <span class="cat-icon">☁️</span>
+                <span class="cat-label">Cloud</span>
+                <span class="cat-count" id="count-cloud">0 Items</span>
+            </button>
+            <button class="category-btn ai" onclick="openDashboard('AI')">
+                <span class="cat-icon">🤖</span>
+                <span class="cat-label">AI/Machine Learning</span>
+                <span class="cat-count" id="count-ai">0 Items</span>
+            </button>
+            <button class="category-btn hardware" onclick="openDashboard('HARDWARE')">
+                <span class="cat-icon">⚙️</span>
+                <span class="cat-label">Hardware</span>
+                <span class="cat-count" id="count-hardware">0 Items</span>
+            </button>
+        </div>
+
+        <!-- Main Feed -->
+        <div class="feed" id="feed-container">
+            <!-- Populated by JavaScript -->
+        </div>
+
+        <div class="page-footer">
+            <span id="last-update"></span>
+            <span style="color: var(--crt-glow-primary); margin: 0 10px;">•</span>
+            <span>CRT Display Mode Active</span>
+        </div>
+    </div>
+
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="modalContent">
+            <!-- Populated by JavaScript -->
+        </div>
+    </div>
+
+    <script src="src/data/news-data.js"></script>
+    <script src="src/js/utils.js"></script>
+    <script src="src/js/app.js"></script>
+</body>
+</html>

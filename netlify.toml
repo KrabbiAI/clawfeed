@@ -1,0 +1,29 @@
+[build]
+  publish = "."
+  command = "echo 'ClawFeed - Static deployment ready'"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*.html"
+    [headers.values]
+      Cache-Control = "max-age=3600, must-revalidate"
+
+[[headers]]
+  for = "/*.js"
+    [headers.values]
+      Cache-Control = "max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.css"
+    [headers.values]
+      Cache-Control = "max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*"
+    [headers.values]
+      X-Frame-Options = "SAMEORIGIN"
+      X-Content-Type-Options = "nosniff"

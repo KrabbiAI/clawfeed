@@ -1,0 +1,26 @@
+{
+  "name": "clawfeed",
+  "version": "1.0.0",
+  "description": "ClawFeed - CRT-style IT News Dashboard with Category-based Dashboards",
+  "author": "OpenClaw",
+  "license": "MIT",
+  "scripts": {
+    "dev": "python3 -m http.server 8000",
+    "bot:add": "python3 scripts/news-bot.py add",
+    "bot:list": "python3 scripts/news-bot.py list",
+    "bot:stats": "python3 scripts/news-bot.py stats",
+    "bot:remove": "python3 scripts/news-bot.py remove",
+    "bot:export": "python3 scripts/news-bot.py export",
+    "bot:reset": "python3 scripts/news-bot.py reset --confirm"
+  },
+  "keywords": [
+    "clawfeed",
+    "security",
+    "news",
+    "dashboard",
+    "crt",
+    "terminal",
+    "threat-intel",
+    "ai-agent"
+  ]
+}
