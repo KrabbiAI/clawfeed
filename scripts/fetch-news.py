@@ -206,46 +206,42 @@ def main():
         print("  Set TAVILY_API_KEY env var or add to credentials.json")
         return
     
-    # Load existing news (for deduplication)
-    existing = load_news()
-    existing_titles = {item['title'].lower() for item in existing}
-    
     # Fetch fresh news
     all_news = fetch_all()
     
-    # Select top items per category, excluding already-added
+    # Build completely fresh list - old news are REPLACED
     new_items = []
-    next_id = max([item['id'] for item in existing], default=0) + 1
+    next_id = 1
     
     for category in ['SECURITY', 'ZERODAY', 'CLOUD', 'AI', 'HARDWARE']:
         items = all_news.get(category, [])
+        seen_titles = set()
         count = 0
         for item in items:
             if count >= MAX_ITEMS_PER_CATEGORY:
                 break
-            if item['title'].lower() not in existing_titles:
-                priority = determine_priority(item['title'], item['description'])
-                tags = determine_tags(item['title'], item['description'], category)
-                new_items.append({
-                    'id': next_id,
-                    'title': item['title'],
-                    'description': item['description'],
-                    'category': category,
-                    'priority': priority,
-                    'tags': tags,
-                    'source': item['source'],
-                    'timestamp': datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z'),
-                    'link': item.get('link', '')
-                })
-                next_id += 1
-                count += 1
+            title_lower = item['title'].lower()
+            if title_lower in seen_titles:
+                continue
+            seen_titles.add(title_lower)
+            priority = determine_priority(item['title'], item['description'])
+            tags = determine_tags(item['title'], item['description'], category)
+            new_items.append({
+                'id': next_id,
+                'title': item['title'],
+                'description': item['description'],
+                'category': category,
+                'priority': priority,
+                'tags': tags,
+                'source': item['source'],
+                'timestamp': datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z'),
+                'link': item.get('link', '')
+            })
+            next_id += 1
+            count += 1
     
-    # Combine: new items first, then existing
-    combined = new_items + existing
-    
-    # Keep max 100 items total
-    if len(combined) > 100:
-        combined = combined[:100]
+    # REPLACE old news with fresh ones - no combining
+    combined = new_items
     
     save_news(combined)
     print(f"\n=== Summary ===")
