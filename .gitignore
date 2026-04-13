@@ -11,3 +11,19 @@ build/
 *.log
 backups/
 .netlify/
+
+# Credentials & Secrets
+credentials.json
+*.json
+.env
+.env.*
+secrets/
+keys/
+
+# Logs
+*.log
+logs/
+
+# OS
+Thumbs.db
+.DS_Store
