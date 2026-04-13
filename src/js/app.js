@@ -81,20 +81,12 @@ function openDashboard(category) {
         `;
     } else {
         modalContent += `
-            <div class="modal-filters">
-                <button class="filter-btn active" onclick="filterModal('all', '${category}')">All</button>
-                <button class="filter-btn" onclick="filterModal('critical', '${category}')">Critical</button>
-                <button class="filter-btn" onclick="filterModal('warning', '${category}')">Warning</button>
-                <button class="filter-btn" onclick="filterModal('info', '${category}')">Info</button>
-            </div>
-
             <div class="modal-feed" id="modalFeed">
                 ${items.map(item => `
                     <div class="modal-news-item ${colorClass}">
                         <div class="modal-news-title">${escapeHtml(item.title)}</div>
                         <div class="modal-news-desc">${escapeHtml(item.description)}</div>
                         <div class="modal-news-meta">
-                            <span><strong>Priority:</strong> ${item.priority}</span>
                             <span><strong>Source:</strong> ${escapeHtml(item.source)}</span>
                             <span><strong>Time:</strong> ${formatTime(item.timestamp)}</span>
                         </div>
