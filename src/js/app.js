@@ -6,26 +6,16 @@ function init() {
     setupModalEvents();
 }
 
-// Render Main Feed
+// Render Main Feed - shows empty state, news only in modals
 function renderMainFeed() {
     const container = document.getElementById('feed-container');
-    container.innerHTML = '';
-
-    if (newsData.length === 0) {
-        container.innerHTML = `
-            <div class="empty-state" style="grid-column: 1 / -1;">
-                <div class="empty-state-icon">📡</div>
-                <div class="empty-state-text">No news items yet</div>
-                <div class="empty-state-subtext">Click a category above to start adding news</div>
-            </div>
-        `;
-        return;
-    }
-
-    newsData.forEach(item => {
-        const article = createNewsElement(item);
-        container.appendChild(article);
-    });
+    container.innerHTML = `
+        <div class="empty-state" style="grid-column: 1 / -1;">
+            <div class="empty-state-icon">🦀</div>
+            <div class="empty-state-text">ClawFeed</div>
+            <div class="empty-state-subtext">Click a category above to view news</div>
+        </div>
+    `;
 }
 
 // Create News Item Element
