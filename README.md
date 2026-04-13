@@ -1,291 +1,145 @@
-# 🦀 CLAWFEED - News Dashboard for AI Agents
+# 🦀 ClawFeed - AI-Powered Threat Intel Dashboard
 
-CRT-style IT News Dashboard with 5 categories. Designed to be operated by AI agents.
+Real-Time IT Threat & Innovation Feed mit 5 Kategorien, betrieben von AI Agents via Tavily Search API.
 
-## 📑 The 5 Categories
-
-| Category | Icon | Use Case |
-|----------|------|----------|
-| **IT-Security** | 🔒 | CVEs, Vulnerabilities, Security Patches, Breaches |
-| **Zeroday** | 💣 | Unpatched Exploits, Active Threats, Ransomware |
-| **Cloud** | ☁️ | Kubernetes, AWS, Azure, GCP, Infrastructure |
-| **AI/Machine Learning** | 🤖 | LLMs, AI Models, Jailbreaks, AI Safety |
-| **Hardware** | ⚙️ | CPU/GPU Exploits, Side-Channels, Microarchitecture |
+**Live:** https://clawfeed.netlify.app
 
 ---
 
-## 🚀 Quick Start (for Humans)
+## 🎯 Die 5 Kategorien
+
+| Kategorie | Icon | Beschreibung |
+|-----------|------|--------------|
+| **SECURITY** | 🔒 | CVEs, Vulnerabilities, Security Patches, Breaches |
+| **ZERODAY** | 💣 | Unpatched Exploits, Active Threats, Ransomware |
+| **CLOUD** | ☁️ | Kubernetes, AWS, Azure, GCP, Infrastructure |
+| **AI** | 🤖 | LLMs, AI Models, Jailbreaks, AI Safety |
+| **HARDWARE** | ⚙️ | CPU/GPU Exploits, Side-Channels, Microarchitecture |
+
+---
+
+## ⚙️ Tech Stack
+
+- **Frontend:** Vanilla HTML/CSS/JavaScript (kein Build-Step)
+- **Data:** JavaScript file (`news-data.js`)
+- **Fetching:** Tavily Search API (4x täglich automatisch)
+- **Bot:** Python 3 CLI für manuelles News-Management
+- **Hosting:** Netlify / GitHub Pages / beliebiges static Hosting
+
+---
+
+## 🚀 Quick Start
 
 ```bash
-# Start locally
+# Lokal starten
 python3 -m http.server 8000
 # → http://localhost:8000
 ```
 
-Click a category button to open the dashboard for that category.
-
 ---
 
-## 🤖 For AI Agents - Bot Commands
+## 🤖 AI Agent Operation
 
-The bot is located at `scripts/news-bot.py` and is optimized for AI operation.
-
-### Add News to ClawFeed
+### News automatisch fetchen (4x täglich)
 
 ```bash
-python3 scripts/news-bot.py add \
-  "Title of the news" \
-  "Description/content of the news" \
-  SECURITY \
-  CRITICAL \
-  --tags tag1 tag2 tag3 \
-  --source "Source Name"
+# Cron: 0:00, 6:00, 12:00, 18:00
+cd /home/dobby/projects/clawfeed
+python3 scripts/fetch-news.py
 ```
 
-**Required Arguments:**
-- `title`: News headline (string)
-- `description`: News details (string)
-- `category`: One of: `SECURITY`, `ZERODAY`, `CLOUD`, `AI`, `HARDWARE`
-- `priority`: One of: `CRITICAL`, `WARNING`, `INFO`
-
-**Optional Arguments:**
-- `--tags`: Space-separated tags (e.g., `--tags openssl rce patch`)
-- `--source`: News source name (required)
-
-### Examples for AI Agents
+### Manuell News hinzufügen
 
 ```bash
-# Add security news
 python3 scripts/news-bot.py add \
-  "CVE-2024-1234: Critical RCE in OpenSSL" \
-  "Remote code execution vulnerability affecting all recent versions. Immediate patching required." \
+  "CVE-2026-XXXX: Critical RCE in OpenSSL" \
+  "Remote code execution vulnerability..." \
   SECURITY CRITICAL \
-  --tags openssl rce patch-required \
+  --tags openssl rce patch \
   --source "NVD"
-
-# Add zero-day
-python3 scripts/news-bot.py add \
-  "Windows Kernel Privilege Escalation Exploited" \
-  "Previously unknown vulnerability being actively exploited in the wild." \
-  ZERODAY CRITICAL \
-  --tags windows kernel pe active-threat \
-  --source "Microsoft Security Response Center"
-
-# Add cloud infrastructure news
-python3 scripts/news-bot.py add \
-  "Kubernetes 1.30 Released" \
-  "Major version introduces enhanced RBAC and 15% performance improvements." \
-  CLOUD INFO \
-  --tags kubernetes release devops \
-  --source "K8s Blog"
-
-# Add AI/ML news
-python3 scripts/news-bot.py add \
-  "Claude 3.5 Sonnet Released" \
-  "New language model with improved reasoning and safety features." \
-  AI INFO \
-  --tags llm model ai-safety \
-  --source "Anthropic"
-
-# Add hardware news
-python3 scripts/news-bot.py add \
-  "New Spectre Variant Found in Intel CPUs" \
-  "Side-channel attack possible in 12th gen processors." \
-  HARDWARE WARNING \
-  --tags spectre cpu microarchitecture \
-  --source "Intel Security"
 ```
 
-### List News
+### Weitere Bot Commands
 
 ```bash
-# List all news
-python3 scripts/news-bot.py list
-
-# List only SECURITY category
-python3 scripts/news-bot.py list --category SECURITY
-
-# List only CRITICAL items
-python3 scripts/news-bot.py list --category ZERODAY
-```
-
-### Remove News
-
-```bash
-# Remove news item with ID 5
-python3 scripts/news-bot.py remove 5
-```
-
-### Show Statistics
-
-```bash
-# Display statistics by category and priority
-python3 scripts/news-bot.py stats
-```
-
-### Reset ClawFeed (Delete All)
-
-```bash
-# DANGER: Delete all news items
-python3 scripts/news-bot.py reset --confirm
-```
-
-### Export News as JSON
-
-```bash
-# Export all news as JSON
-python3 scripts/news-bot.py export > backup.json
+python3 scripts/news-bot.py list                    # Alle News
+python3 scripts/news-bot.py list --category SECURITY # Nach Kategorie
+python3 scripts/news-bot.py stats                   # Statistiken
+python3 scripts/news-bot.py remove 5                 # News #5 löschen
+python3 scripts/news-bot.py reset --confirm          # Alles löschen
 ```
 
 ---
 
-## 📊 Data Format
-
-News items are stored in `src/data/news-data.js` as JavaScript:
-
-```javascript
-const newsData = [
-    {
-        "id": 1,
-        "title": "News headline",
-        "description": "Detailed description",
-        "category": "SECURITY",
-        "priority": "CRITICAL",
-        "tags": ["tag1", "tag2"],
-        "source": "Source Name",
-        "timestamp": "2024-04-13T10:00:00Z"
-    }
-];
-```
-
-The bot automatically manages this file. Do not edit manually (except for initial setup).
-
----
-
-## 🎯 Dashboard Features
-
-When you click a category button:
-
-✅ **Statistics Cards**
-- Total items in category
-- Critical count
-- Warning count
-- Info count
-
-✅ **Filters**
-- All items
-- Critical only
-- Warning only
-- Info only
-
-✅ **Empty State Message**
-- Shows "No items in this category" if category is empty
-
----
-
-## 📁 Project Structure
+## 📁 Projektstruktur
 
 ```
 clawfeed/
-├── index.html                      # Main page
+├── index.html                      # Hauptseite
 ├── src/
 │   ├── styles/
-│   │   ├── main.css               # Main styles + CRT design
-│   │   └── dashboard.css          # Modal styles
+│   │   ├── main.css               # CRT Design
+│   │   └── dashboard.css           # Modal Styles
 │   ├── js/
-│   │   ├── app.js                 # App logic
-│   │   └── utils.js               # Utility functions
+│   │   ├── app.js                 # App Logik
+│   │   └── utils.js                # Utilities
 │   └── data/
-│       └── news-data.js           # News data (managed by bot)
+│       └── news-data.js            # News Daten
 ├── scripts/
-│   └── news-bot.py                # Bot script (AI-friendly)
-├── netlify.toml                   # Netlify config
-├── package.json                   # NPM scripts
-└── README.md                      # This file
+│   ├── fetch-news.py              # Tavily Fetcher (PRIMÄR)
+│   └── news-bot.py                # CLI Bot
+├── netlify.toml                   # Netlify Config
+├── AI_AGENT_GUIDE.md              # Detaillierte AI Dokumentation
+└── README.md                      # Diese Datei
+```
+
+---
+
+## 🔄 Automation
+
+### Tavily Search API
+
+Der Fetcher nutzt Tavily statt RSS-Feeds für bessere Results:
+
+- HTML Cleaning automatisch
+- Globale Deduplication
+- Relevanz-basiertes Ranking
+- 3 Queries pro Kategorie, top 5 Results pro Query
+
+### Cron Setup
+
+```bash
+# ClawFeed - Fetch news 4x daily
+0 0,6,12,18 * * * cd /home/dobby/projects/clawfeed && python3 scripts/fetch-news.py
 ```
 
 ---
 
 ## 🌐 Deployment
 
-### Netlify (Recommended)
+### Netlify (empfohlen)
 
-1. Push to GitHub
-2. Connect repo to Netlify
-3. Netlify auto-deploys (no build step needed)
+1. GitHub Repo verbinden: `https://github.com/KrabbiAI/clawfeed`
+2. Automatisches Deployment bei jedem Push
 
-### Local Development
+### GitHub Pages
 
-```bash
-python3 -m http.server 8000
-```
-
-### Self-Hosted
-
-Copy files to your web server (static hosting only).
+1. Settings → Pages → Source: `main` branch
+2. Fertig unter: `https://KrabbiAI.github.io/clawfeed`
 
 ---
 
-## 📝 For AI Agents: Operation Notes
+## 📊 Features
 
-**Important for agentic operation:**
-
-1. **Always use `--confirm` flag** when resetting:
-   ```bash
-   python3 scripts/news-bot.py reset --confirm
-   ```
-
-2. **Check for duplicates** - The bot prevents duplicate titles automatically
-
-3. **Timestamp format** - Always ISO8601 (bot handles this automatically)
-
-4. **Empty state handling** - If a category has no items:
-   - The modal shows "No items in this category"
-   - Statistics show all zeros
-   - The dashboard is still fully functional
-
-5. **Tags format** - Space-separated strings:
-   ```bash
-   --tags tag1 tag2 tag3
-   ```
-   NOT: `--tags "tag1, tag2, tag3"` (wrong)
-
-6. **Help command** - Get full documentation:
-   ```bash
-   python3 scripts/news-bot.py --help
-   ```
+✅ CRT Terminal Aesthetic mit Scanlines  
+✅ 5 Kategorie Dashboards  
+✅ Prioritäts-Filter (CRITICAL/WARNING/INFO)  
+✅ AI Agent-optimiertes CLI  
+✅ Tavily-powered automatic fetching  
+✅ Mobile Responsive  
+✅ Keine externen Dependencies  
+✅ Sofort einsatzbereit  
 
 ---
 
-## 🛠️ Tech Stack
-
-- **Frontend**: Vanilla HTML/CSS/JavaScript (no build step)
-- **Data**: JavaScript file (`news-data.js`)
-- **Bot**: Python 3 CLI script
-- **Hosting**: Static (Netlify, GitHub Pages, or self-hosted)
-
----
-
-## ✨ Features
-
-✅ CRT terminal aesthetic with scanlines  
-✅ 5 category dashboards  
-✅ Filter by priority level  
-✅ Empty state messages  
-✅ AI agent-friendly bot CLI  
-✅ No external dependencies  
-✅ Mobile responsive  
-✅ Instant deployment  
-
----
-
-## 📞 Help
-
-Show detailed help for the bot:
-```bash
-python3 scripts/news-bot.py --help
-```
-
----
-
-Made for OpenClaw 🦀
+Made with ❤️ by Krabbi 🦀
