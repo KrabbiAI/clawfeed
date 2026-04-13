@@ -58,7 +58,6 @@ function openDashboard(category) {
     
     const catInfo = categories[category];
     const items = filterNewsByCategory(category);
-    const stats = getCategoryStats(category);
 
     const colorClass = catInfo.color;
 
@@ -69,25 +68,6 @@ function openDashboard(category) {
                 <div class="modal-title">${catInfo.label}</div>
             </div>
             <button class="modal-close" onclick="closeDashboard()">✕</button>
-        </div>
-
-        <div class="dashboard-stats">
-            <div class="stat-card ${colorClass}">
-                <div class="stat-number">${stats.total}</div>
-                <div class="stat-label">Total Items</div>
-            </div>
-            <div class="stat-card ${colorClass}">
-                <div class="stat-number" style="color: #ff1744;">${stats.critical}</div>
-                <div class="stat-label">Critical</div>
-            </div>
-            <div class="stat-card ${colorClass}">
-                <div class="stat-number" style="color: #ffa500;">${stats.warning}</div>
-                <div class="stat-label">Warning</div>
-            </div>
-            <div class="stat-card ${colorClass}">
-                <div class="stat-number" style="color: #00d9ff;">${stats.info}</div>
-                <div class="stat-label">Info</div>
-            </div>
         </div>
     `;
 
